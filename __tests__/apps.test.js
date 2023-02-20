@@ -15,7 +15,6 @@ describe("app", () => {
             .expect(200)
             .then(({body}) => {
                 const {topics} = body
-            expect(topics).toBeInstanceOf(Array)
             expect(topics).toHaveLength(3)
             topics.forEach((topic) => {
                 expect(topic).toMatchObject({
@@ -25,17 +24,21 @@ describe("app", () => {
             })
             })
         });
+        
+      
+    })
+    describe('Error handling', () => {
         test('404: Should return error - invalid pathway ', () => {
             return request(app)
             .get("/api/notTopics")
             .expect(404)
             .then(({body}) => {
             expect(body.message).toBe("invalid pathway")
-
+        
             })
-            
         });
-      
+
     })
     
 })
+
