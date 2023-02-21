@@ -1,0 +1,8 @@
+{
+    "prettier.endOfLine": "auto",
+    "prettier.singleAttributePerLine": true,
+    "prettier.trailingComma": "all",
+    "prettier.useTabs": true,
+    "prettier.vueIndentScriptAndStyle": true,
+    "prettier.withNodeModules": true
+}
