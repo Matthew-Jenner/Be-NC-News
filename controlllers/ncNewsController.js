@@ -5,7 +5,7 @@ fetchTopics().then((topics) => {
     res.status(200).send({topics})
 })
 .catch(error => {
-    console.log(error)
+
     next(error)
 })
 };
@@ -15,7 +15,6 @@ exports.getArticles = (req, res, next) => {
         res.status(200).send({articles})
     })
     .catch(error => {
-        console.log(error)
         next(error)
     })
     };
