@@ -92,6 +92,22 @@ describe("app", () => {
         
             })
         });
+        test('400: Should return an error for invalid article_id', () => {
+            return request(app)
+            .get("/api/articles/invalid_article_id")
+            .expect(400)
+            .then(({body}) => {
+                expect(body.message).toBe("invalid article_id")
+            })
+        })
+        test('404: Should return an error for valid but not existent article_id', () => {
+            return request(app)
+            .get("/api/articles/123456")
+            .expect(404)
+            .then(({body}) => {
+                expect(body.message).toBe("article id not found")
+            })
+        })
 
     })
     
