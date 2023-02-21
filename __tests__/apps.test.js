@@ -55,7 +55,6 @@ describe("app", () => {
             .get("/api/articles")
             .expect(200)
             .then(({body}) => {
-                console.log(body)
                 const {articles} = body;
                 expect(articles).toBeSorted({ key: 'created_at', descending: true})
             })
@@ -64,6 +63,25 @@ describe("app", () => {
         
       
     })
+    describe("GET /api/articles/:article_id", () => {
+        test('200: GET - an articles array of article objects, each of which should have the following properties: author, title, article_id, topic, created_at, votes, article_img_url, comment_count', () => {
+            return request(app)
+            .get("/api/articles/3")
+            .expect(200)
+            .then(({body}) => {
+                expect(body.article).toEqual({
+                    article_id: 3,
+                    title: 'Eight pug gifs that remind me of mitch',
+                    topic: 'mitch',
+                    author: 'icellusedkars',
+                    body: 'some gifs',
+                    created_at: "2020-11-03T09:12:00.000Z",
+                article_img_url:'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+                    votes: 0,
+                });
+            })
+        })
+        })
     describe('Error handling', () => {
         test('404: Should return error - invalid pathway ', () => {
             return request(app)
