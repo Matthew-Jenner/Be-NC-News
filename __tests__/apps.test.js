@@ -4,6 +4,7 @@ const testData = require('../db/data/test-data/index')
 const seed = require('../db/seeds/seed')
 const db = require('../db/connection')
 
+
 beforeEach(()=> seed(testData))
 afterAll(()=> db.end())
 
@@ -50,17 +51,17 @@ describe("app", () => {
             })
             })
         });
-    //     test('200: Responds with articles sorted by date in descending order. ', () => {
-    //         return request(app)
-    //         .get("/api/articles")
-    //         .expect(200)
-    //         .then(({body}) => {
-    //             console.log(body)
-    //            // const {articles} = body;
-    //             expect(body).toBeSorted({ key: 'created_at', descending: true})
-    //         })
+        test('200: Responds with articles sorted by date in descending order. ', () => {
+            return request(app)
+            .get("/api/articles")
+            .expect(200)
+            .then(({body}) => {
+                console.log(body)
+                const {articles} = body;
+                expect(articles).toBeSorted({ key: 'created_at', descending: true})
+            })
             
-    //     });
+        });
         
       
     })
