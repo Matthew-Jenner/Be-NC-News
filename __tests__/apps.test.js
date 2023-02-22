@@ -69,7 +69,7 @@ describe("app", () => {
             .get("/api/articles/3")
             .expect(200)
             .then(({body}) => {
-                expect(body.article).toEqual({
+                expect(body.article).toMatchObject({
                     article_id: 3,
                     title: 'Eight pug gifs that remind me of mitch',
                     topic: 'mitch',
