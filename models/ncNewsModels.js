@@ -45,12 +45,20 @@ exports.fetchArticles = () => {
         })
     }
     exports.insertComment = (article_id, newComment) => {
+       
         return db.query(`INSERT INTO comments 
         (author, body, article_id) 
         VALUES ($1, $2, $3) 
         RETURNING *`, 
         [newComment.username, newComment.body, article_id])
         .then((result) => {
+            if(newComment.body===undefined || newComment.username===undefined) {
+                return Promise.reject({
+                    status: 400,
+                    message: "username or comment missing"
+                })
+            }
             return result.rows[0]
+          
         })
     }

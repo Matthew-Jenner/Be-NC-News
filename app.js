@@ -14,8 +14,9 @@ app.all('*', (req, res, next)=>{
     res.status(404).send({message: "invalid pathway"})
 })
 
-app.use(handlePSQLErrors)
+
 app.use(handleCustomErrors)
+app.use(handlePSQLErrors)
 app.use(handle500Statuses)
 
 module.exports = app;
