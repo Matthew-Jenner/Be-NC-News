@@ -133,6 +133,25 @@ describe("app", () => {
                 })
                 
             });
+            test(' 201: ignores unnecessary properties and responds with a posted comment with username and body ', () => {
+                return request(app)
+                .post("/api/articles/3/comments")
+                .send({ username: "icellusedkars", body: "this is a new comment", fruit: "apple"})
+                .expect(201)
+                .then(({body}) => {
+                    const {comment} = body
+                    expect(comment).toMatchObject({
+                        comment_id: 19,
+                        author: "icellusedkars" ,
+                        body: "this is a new comment" ,
+                        votes: 0,
+                        article_id: 3,
+                        created_at: expect.any(String)
+                    })
+
+                })
+                
+            });
         })
 
     describe('Error handling', () => {
