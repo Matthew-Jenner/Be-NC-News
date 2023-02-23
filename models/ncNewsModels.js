@@ -62,3 +62,9 @@ exports.fetchArticles = () => {
           
         })
     }
+    exports.addVotes = (article_id, newVotes ) => {
+        return db.query(`UPDATE articles SET votes=votes + $1 WHERE article_id = $2 RETURNING *;`, [newVotes, article_id])
+        .then((result) => {
+            return result.rows[0]
+        })
+    }
