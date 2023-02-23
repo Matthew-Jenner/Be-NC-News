@@ -113,6 +113,47 @@ describe("app", () => {
                 
             });
         })
+        describe('POST /api/articles/:article_id/comments', () => {
+            test(' 201: Responds with a posted comment with username and body ', () => {
+                return request(app)
+                .post("/api/articles/3/comments")
+                .send({ username: "icellusedkars", body: "this is a new comment"})
+                .expect(201)
+                .then(({body}) => {
+                    const {comment} = body
+                    expect(comment).toMatchObject({
+                        comment_id: 19,
+                        author: "icellusedkars" ,
+                        body: "this is a new comment" ,
+                        votes: 0,
+                        article_id: 3,
+                        created_at: expect.any(String)
+                    })
+
+                })
+                
+            });
+            test(' 201: ignores unnecessary properties and responds with a posted comment with username and body ', () => {
+                return request(app)
+                .post("/api/articles/3/comments")
+                .send({ username: "icellusedkars", body: "this is a new comment", fruit: "apple"})
+                .expect(201)
+                .then(({body}) => {
+                    const {comment} = body
+                    expect(comment).toMatchObject({
+                        comment_id: 19,
+                        author: "icellusedkars" ,
+                        body: "this is a new comment" ,
+                        votes: 0,
+                        article_id: 3,
+                        created_at: expect.any(String)
+                    })
+
+                })
+                
+            });
+        })
+
     describe('Error handling', () => {
         test('404: Should return error - invalid pathway ', () => {
             return request(app)
@@ -164,7 +205,61 @@ describe("app", () => {
         
             })
         });
+        test('400: Should return an error for invalid article_id', () => {
+            return request(app)
+            .post("/api/articles/invalid_article_id/comments")
+            .expect(400)
+            .then(({body}) => {
+                expect(body.message).toBe("invalid article_id")
+            })
+        })
+        test('404: Should return an error for valid but not existent article_id', () => {
+            return request(app)
+            .post("/api/articles/123456/comments")
+            .send({
+                username: "butter_bridge",
+                body: "invalid article_id error"
+            })
+            .expect(404)
+            .then(({body}) => {
+                expect(body.message).toBe("article id not found")
+            })
+        })
+        
+        test('400: should return an error if a missing username ', () => {
+            return request(app)
+            .post("/api/articles/3/comments")
+            .send({body: "no username with this comment"})
+            .expect(400)
+            .then(({body}) => {
+                expect(body.message).toBe("username or comment missing")
+            })
+        })
+        test('400: should return an error if a missing the body of comment ', () => {
+            return request(app)
+            .post("/api/articles/3/comments")
+            .send({username: "butter_bridge"})
+            .expect(400)
+            .then(({body}) => {
+                expect(body.message).toBe("username or comment missing")
+            })
+        })
+        test('404: Should return an error for non existent user', () => {
+            return request(app)
+            .post("/api/articles/3/comments")
+            .send({
+                username: "bananarama",
+                body: "I am not a user"
+            })
+            .expect(404)
+            .then(({body}) => {
+                expect(body.message).toBe("This is not a user")
+            })
+        })
     })
     
 })
+
+
+// 404 written by a non existent user
 
