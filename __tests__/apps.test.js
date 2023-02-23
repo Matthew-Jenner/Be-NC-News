@@ -279,10 +279,42 @@ describe("app", () => {
                 expect(body.message).toBe("This is not a user")
             })
         })
+        test('400: Should return an error for invalid article_id', () => {
+            return request(app)
+            .patch("/api/articles/invalid_article_id")
+            .expect(400)
+            .then(({body}) => {
+                expect(body.message).toBe("invalid article_id")
+            })
+        })
+        test('404: Should return an error for valid but not existent article_id', () => {
+            return request(app)
+            .patch("/api/articles/123456")
+            .send({
+                inc_votes: 1,
+            })
+            .expect(404)
+            .then(({body}) => {
+                expect(body.message).toBe("article id not found")
+            })
+        })
+        test('400: Should return an error for votes not being a number', () => {
+            return request(app)
+            .patch("/api/articles/1")
+            .send({
+                inc_votes: 'notANumber',
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.message).toBe("invalid voting")
+            })
+        })
+        
     })
     
 })
 
 
-// 404 written by a non existent user
+
+
 

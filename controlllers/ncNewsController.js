@@ -46,7 +46,6 @@ exports.getArticles = (req, res, next) => {
         })
     }
     exports.patchVotes = (req, res, next) => {
-        console.log(req.body)
         const {article_id} = req.params;
         const {inc_votes} = req.body;
         addVotes(article_id, inc_votes).then((updatedVotes) => {
