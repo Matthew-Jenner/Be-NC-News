@@ -63,7 +63,7 @@ exports.fetchArticles = () => {
         })
     }
     exports.addVotes = (article_id, newVotes ) => {
-         if(typeof newVotes !== "number" && newVotes !==undefined) {
+         if(typeof newVotes !== "number" || newVotes ===undefined ) {
             return Promise.reject({
                 status: 400,
                 message: "invalid voting"

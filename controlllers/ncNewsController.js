@@ -51,6 +51,7 @@ exports.getArticles = (req, res, next) => {
         addVotes(article_id, inc_votes).then((updatedVotes) => {
             res.status(200).send(updatedVotes)
         }).catch(error => {
+            console.log(error)
             next(error);
         })
     }

@@ -282,6 +282,9 @@ describe("app", () => {
         test('400: Should return an error for invalid article_id', () => {
             return request(app)
             .patch("/api/articles/invalid_article_id")
+            .send({
+                inc_votes: 1,
+            })
             .expect(400)
             .then(({body}) => {
                 expect(body.message).toBe("invalid article_id")
@@ -309,7 +312,17 @@ describe("app", () => {
                 expect(body.message).toBe("invalid voting")
             })
         })
-        
+        test('400: Should return an error for incorrect key', () => {
+            return request(app)
+            .patch("/api/articles/1")
+            .send({
+                notVotesKey: 3,
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.message).toBe("invalid voting")
+            })
+        })
     })
     
 })
