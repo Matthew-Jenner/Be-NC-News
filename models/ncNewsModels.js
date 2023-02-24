@@ -62,6 +62,11 @@ exports.fetchArticles = () => {
           
         })
     }
+
+    exports.fetchUsers = () => {
+        return db.query("SELECT * FROM users;")
+        .then((result) => result.rows)
+        }
     exports.addVotes = (article_id, newVotes ) => {
          if(typeof newVotes !== "number" || newVotes ===undefined ) {
             return Promise.reject({

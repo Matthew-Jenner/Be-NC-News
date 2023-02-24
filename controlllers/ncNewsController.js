@@ -1,4 +1,4 @@
-const { fetchTopics, fetchArticles, fetchArticlesById, fetchComments, insertComment, addVotes} = require("../models/ncNewsModels")
+const { fetchTopics, fetchArticles, fetchArticlesById, fetchComments, insertComment, addVotes, fetchUsers} = require("../models/ncNewsModels")
 
 exports.getTopics = (req, res, next) => {
 fetchTopics().then((topics) => {
@@ -42,6 +42,15 @@ exports.getArticles = (req, res, next) => {
         insertComment(article_id, newComment).then((comment) => {
             res.status(201).send({comment})
         }).catch(error => {
+            next(error)
+        })
+    }
+    exports.getUsers = (req, res, next) => {
+        fetchUsers().then((users) => {
+            res.status(200).send({users})
+        })
+        .catch(error => {
+        
             next(error)
         })
     }
