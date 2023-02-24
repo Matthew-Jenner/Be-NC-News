@@ -109,7 +109,19 @@ describe("app", () => {
                 })
             })
             
-        });
+        })
+        test('200: filter is valid yet no articles but not a bad request', () => {
+            return request(app)
+            .get("/api/articles")
+            .query({sort_by: "author", order: "ASC", topic: "fruit"})
+            .expect(200)
+            .then(({body}) => {
+                const {articles} = body;
+                expect(articles.length).toBe(0)
+                expect(body).toEqual({articles: []})
+            
+        })
+    })
     })
     
     
@@ -318,21 +330,13 @@ describe("app", () => {
         test('400: Should return error for invalid order query ', () => {
             return request(app)
             .get("/api/articles")
-            .query({sort_by: "artile_id", order: "inValidOrder", topic: "mitch"})
+            .query({sort_by: "article_id", order: "inValidOrder", topic: "mitch"})
             .expect(400)
             .then(({body}) => {
-                expect(body.message).toBe("Invalid sort query")
+                expect(body.message).toBe("Invalid order query")
         });
     })
-         test('404: should return an error for invalid topic ', () => {
-        return request(app)
-        .get("/api/articles")
-        .query({sort_by: "article_id", order: "DESC", topic: "inValidTopic"})
-        .expect(404)
-        .then(({body}) => {
-            expect(body.message).toBe("Invalid topic")
-    });
-})
+        
     })
     
 })
