@@ -64,6 +64,10 @@ exports.fetchArticles =  (topic, sort_by = "created_at", order="DESC") => {
         GROUP BY articles.article_id
     `, [article_id])
         .then((result) =>  {
+            if(result.rows.length){
+                result.rows[0].comment_count = Number(result.rows[0].comment_count)
+                return result.rows[0]
+            }
             if(result.rows.length===0){
                 return Promise.reject({
                     status: 404,

@@ -149,7 +149,7 @@ describe("app", () => {
             .expect(200)
             .then(({body}) => {
                 const { article } = body
-                expect(article.comment_count).toBe("2")
+                expect(article.comment_count).toBe(2)
             })
         });
         })
