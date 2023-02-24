@@ -15,7 +15,6 @@ exports.handlePSQLErrors = (error, req, res, next) => {
         res.status(404).send({message: "This is not a user"})
     }else if(error.code === '23502'){
         res.status(400).send({message: "username or comment missing"})
-
     }
         {
         next(error)
