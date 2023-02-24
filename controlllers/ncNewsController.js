@@ -25,8 +25,10 @@ exports.getArticles = (req, res, next) => {
     exports.getArticlesById = (req, res, next) => {
         const {article_id} = req.params;
         fetchArticlesById(article_id).then((article) => {
+            console.log({article})
             res.status(200).send({article})
         }).catch(error => {
+
             next(error)
         })
     }
@@ -63,7 +65,7 @@ exports.getArticles = (req, res, next) => {
         addVotes(article_id, inc_votes).then((updatedVotes) => {
             res.status(200).send(updatedVotes)
         }).catch(error => {
-            console.log(error)
+    
             next(error);
         })
     }

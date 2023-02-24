@@ -143,6 +143,15 @@ describe("app", () => {
                 });
             })
         })
+        test('200: responds with article object containing coment count ', () => {
+            return request(app)
+            .get('/api/articles/3')
+            .expect(200)
+            .then(({body}) => {
+                const { article } = body
+                expect(article.comment_count).toBe("2")
+            })
+        });
         })
         describe(" GET /api/articles/:article_id/comments", () => {
             test('200 GET - an article comments array, each of which should contain comment_id, votes, created_at, author, body, article_id in descending order', () => {

@@ -23,7 +23,7 @@ exports.fetchArticles =  (topic, sort_by = "created_at", order="DESC") => {
         })
     }
    
-    
+  
 
        let baseQuery = `SELECT articles.*, 
         COUNT(comments.article_id) :: INT AS comment_count
@@ -56,7 +56,13 @@ exports.fetchArticles =  (topic, sort_by = "created_at", order="DESC") => {
     
 
     exports.fetchArticlesById = (article_id) => {
-        return db.query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
+        return db.query(`
+        SELECT articles.*, COUNT(comments.article_id) AS comment_count
+        FROM articles
+        LEFT JOIN comments ON comments.article_id = articles.article_id
+        WHERE articles.article_id = $1
+        GROUP BY articles.article_id
+    `, [article_id])
         .then((result) =>  {
             if(result.rows.length===0){
                 return Promise.reject({
@@ -127,3 +133,17 @@ exports.fetchArticles =  (topic, sort_by = "created_at", order="DESC") => {
             return result.rows[0]
         })
     }
+
+
+//looking if topic exists off topic
+      // if (topic){
+    //     return exports
+    //       .fetchTopics()
+    //       .then((topics) => {
+    //         const topicNames = topics.map((topic) => topic.slug);
+    //         if (!topicNames.includes(topic)) {
+    //           return Promise.reject({
+    //             status: 404,
+    //             message: "Invalid topic",
+    //           });
+    //         }})}
