@@ -10,8 +10,11 @@ fetchTopics().then((topics) => {
 })
 };
 
+
 exports.getArticles = (req, res, next) => {
-    fetchArticles().then((articles) => {
+    const {topic, sort_by, order} = req.query
+    fetchArticles(topic, sort_by, order).then((articles) => {
+       console.log({articles})
         res.status(200).send({articles})
     })
     .catch(error => {
@@ -40,7 +43,6 @@ exports.getArticles = (req, res, next) => {
         const {article_id} = req.params;
         const newComment = req.body;
         insertComment(article_id, newComment).then((comment) => {
-            console.log({comment})
             res.status(201).send({comment})
         }).catch(error => {
             next(error)
