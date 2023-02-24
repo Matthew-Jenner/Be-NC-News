@@ -62,3 +62,24 @@ exports.fetchArticles = () => {
           
         })
     }
+    exports.addVotes = (article_id, newVotes ) => {
+         if(typeof newVotes !== "number" || newVotes ===undefined ) {
+            return Promise.reject({
+                status: 400,
+                message: "invalid voting"
+            })
+        }
+        return db.query(`UPDATE articles 
+        SET votes=votes + $1 
+        WHERE article_id = $2 
+        RETURNING *;`, [newVotes, article_id])
+        .then((result) => {
+            if(result.rows.length===0){
+                return Promise.reject({
+                    status: 404,
+                    message: "article id not found"
+                }) 
+            }
+            return result.rows[0]
+        })
+    }

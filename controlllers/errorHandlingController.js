@@ -6,6 +6,7 @@ exports.handleCustomErrors = (error, req, res, next) => {
 
 exports.handlePSQLErrors = (error, req, res, next) => {
     if(error.code === '22P02'){
+     
         res.status(400).send({message: "invalid article_id"})
     }else if(error.code === '23503'){
         if(error.constraint==='comments_article_id_fkey'){
@@ -14,6 +15,7 @@ exports.handlePSQLErrors = (error, req, res, next) => {
         res.status(404).send({message: "This is not a user"})
     }else if(error.code === '23502'){
         res.status(400).send({message: "username or comment missing"})
+
     }
         {
         next(error)

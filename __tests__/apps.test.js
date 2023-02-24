@@ -153,6 +153,29 @@ describe("app", () => {
                 
             });
         })
+        describe('PATCH /api/articles/:article_id', () => {
+            test('200: updates votes to include incremental counting', () => {
+                return request(app)
+                .patch("/api/articles/1")
+                .send({ inc_votes: 2 })
+                .expect(200)
+                .then(({body}) => {
+                    const updatedArticle = body
+                    expect(updatedArticle).toEqual({ 
+                    article_id: 1,
+                    title: 'Living in the shadow of a great man',
+                    topic: 'mitch',
+                    author: 'butter_bridge',
+                    body: 'I find this existence challenging',
+                    created_at: "2020-07-09T20:11:00.000Z",
+                    votes: 102,
+                    article_img_url:
+                      'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+
+                    })
+                }) 
+            });
+        })
 
     describe('Error handling', () => {
         test('404: Should return error - invalid pathway ', () => {
@@ -256,10 +279,55 @@ describe("app", () => {
                 expect(body.message).toBe("This is not a user")
             })
         })
+        test('400: Should return an error for invalid article_id', () => {
+            return request(app)
+            .patch("/api/articles/invalid_article_id")
+            .send({
+                inc_votes: 1,
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.message).toBe("invalid article_id")
+            })
+        })
+        test('404: Should return an error for valid but not existent article_id', () => {
+            return request(app)
+            .patch("/api/articles/123456")
+            .send({
+                inc_votes: 1,
+            })
+            .expect(404)
+            .then(({body}) => {
+                expect(body.message).toBe("article id not found")
+            })
+        })
+        test('400: Should return an error for votes not being a number', () => {
+            return request(app)
+            .patch("/api/articles/1")
+            .send({
+                inc_votes: 'notANumber',
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.message).toBe("invalid voting")
+            })
+        })
+        test('400: Should return an error for incorrect key', () => {
+            return request(app)
+            .patch("/api/articles/1")
+            .send({
+                notVotesKey: 3,
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.message).toBe("invalid voting")
+            })
+        })
     })
     
 })
 
 
-// 404 written by a non existent user
+
+
 
