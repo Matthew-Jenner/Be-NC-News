@@ -19,6 +19,14 @@ describe("app", () => {
                 expect(endpoints).toEqual(endpointsJson)
             })
         });
+        test('404: Error issued for invalid endpoint ', () => {
+            return request(app)
+            .get("/Wrong_Endpoint")
+            .expect(404)
+            .then(({body}) => {
+                expect(body.message).toBe("invalid pathway")
+            })
+        });
 
     })
 
