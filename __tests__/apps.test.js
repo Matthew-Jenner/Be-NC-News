@@ -3,11 +3,25 @@ const app = require("../app")
 const testData = require('../db/data/test-data/index')
 const seed = require('../db/seeds/seed')
 const db = require('../db/connection')
+const endpointsJson = require("../endpoints.json")
 
 beforeEach(()=> seed(testData))
 afterAll(()=> db.end())
 
 describe("app", () => {
+    describe("GET /api", () => {
+        test('200: GET - all available endpoints of the api ', () => {
+            return request(app)
+            .get("/api")
+            .expect(200)
+            .then(({body}) => {
+                const { endpoints } = body
+                expect(endpoints).toEqual(endpointsJson)
+            })
+        });
+
+    })
+
     describe("GET /api/topics", () => {
         test('200: GET - an array of topic objects, each of which should have the following properties slug, description', () => {
             return request(app)

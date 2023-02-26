@@ -1,4 +1,14 @@
-const { fetchTopics, fetchArticles, fetchArticlesById, fetchComments, insertComment, addVotes, fetchUsers, removeComment} = require("../models/ncNewsModels")
+const { fetchTopics, fetchArticles, fetchArticlesById, fetchComments, insertComment, addVotes, fetchUsers, removeComment, fetchEndpoints} = require("../models/ncNewsModels")
+
+exports.getEndpoints = (req, res, next) => {
+    fetchEndpoints().then((endpoints) => {
+        res.status(200).send({endpoints})
+    })
+    .catch((error) => {
+        next(error)
+    })
+}
+
 
 exports.getTopics = (req, res, next) => {
 fetchTopics().then((topics) => {
