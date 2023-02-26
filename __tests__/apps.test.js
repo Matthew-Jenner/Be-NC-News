@@ -28,7 +28,38 @@ describe("app", () => {
       
     })
     describe("GET /api/articles", () => {
-            test('200: GET - an articles array of article objects, each of which should have the following properties: author, title, article_id, topic, created_at, votes, article_img_url, comment_count', () => {
+            test('200: GET - an articles array of article objects, each of which should have the following properties: author, title, article_id, topic, created_at, votes, article_img_url', () => {
+                return request(app)
+                .get("/api/articles")
+                .expect(200)
+                .then(({body}) => {
+                    const {articles} = body
+                expect(articles).toHaveLength(12)
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        title: expect.any(String),
+                        article_id: expect.any(Number),
+                        topic: expect.any(String),
+                        author: expect.any(String),
+                        body: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        article_img_url: expect.any(String),
+                    })
+                })
+                })
+            });
+            test('200: Responds with articles sorted by date in descending order. ', () => {
+                return request(app)
+                .get("/api/articles")
+                .expect(200)
+                .then(({body}) => {
+                    const {articles} = body;
+                    expect(articles).toBeSorted({ key: 'created_at', descending: true})
+                })
+                
+            });
+            test('200: GET -  it must include comment_count', () => {
                 return request(app)
                 .get("/api/articles")
                 .expect(200)
@@ -50,16 +81,7 @@ describe("app", () => {
                 })
                 })
             });
-            test('200: Responds with articles sorted by date in descending order. ', () => {
-                return request(app)
-                .get("/api/articles")
-                .expect(200)
-                .then(({body}) => {
-                    const {articles} = body;
-                    expect(articles).toBeSorted({ key: 'created_at', descending: true})
-                })
-                
-            });
+
             
           
         })
