@@ -48,7 +48,6 @@ exports.fetchArticles =  (topic, sort_by = "created_at", order="DESC") => {
       
         return db.query(baseQuery, queryValue)
         .then((result) =>  {
-            console.log(result)
        
                 return result.rows
         })
@@ -137,6 +136,35 @@ exports.fetchArticles =  (topic, sort_by = "created_at", order="DESC") => {
             return result.rows[0]
         })
     }
+
+    exports.removeComment = (comment_id) => {
+        if( isNaN(comment_id)){
+            return Promise.reject({
+                status: 400,
+                message: "invalid comment_id"
+            })
+        }
+        return db.query(`
+        SELECT * FROM comments 
+        WHERE comment_id = $1
+        `, [comment_id])
+        .then((result) => {
+            if(result.rows.length === 0){
+                return Promise.reject({
+                    status: 404,
+                    message: `There are no comments for this address`
+                })
+            } else {
+        return db.query(`
+        DELETE FROM comments 
+        WHERE comment_id = $1
+        `, [comment_id])
+            }})
+        .then((result) => {
+            return result.rows
+        })
+        }
+    
 
 
 //looking if topic exists off topic

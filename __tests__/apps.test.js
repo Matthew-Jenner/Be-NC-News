@@ -266,6 +266,17 @@ describe("app", () => {
                     })
                 });
         })
+        describe("DELETE /api/comments/:comment_id", () => {
+            test('204: Deletes and removes comments related to an article from a database ', () => {
+                return request(app)
+                .delete('/api/comments/1')
+                .expect(204)
+                .then(({body}) => {
+                    expect(body).toEqual({})
+                })
+            });
+
+        })
 
     describe('Error handling', () => {
         test('404: Should return error - invalid pathway ', () => {
@@ -430,6 +441,24 @@ describe("app", () => {
             .expect(400)
             .then(({body}) => {
                 expect(body.message).toBe("invalid voting")
+            })
+        })
+        test('DELETE - 400: returns an error for invalid comment id', () => {
+            return request(app)
+            .delete("/api/comments/banana")
+            .expect(400)
+            .then(({body}) => {
+                expect(body.message).toBe("invalid comment_id")
+
+            })
+        })
+        test('DELETE - 404: returns an error for valid comment_id that is non-existent', () => {
+            return request(app)
+            .delete("/api/comments/31353522")
+            .expect(404)
+            .then(({body}) => {
+                expect(body.message).toBe(`There are no comments for this address`)
+
             })
         })
     })

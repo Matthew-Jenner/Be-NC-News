@@ -1,4 +1,4 @@
-const { fetchTopics, fetchArticles, fetchArticlesById, fetchComments, insertComment, addVotes, fetchUsers} = require("../models/ncNewsModels")
+const { fetchTopics, fetchArticles, fetchArticlesById, fetchComments, insertComment, addVotes, fetchUsers, removeComment} = require("../models/ncNewsModels")
 
 exports.getTopics = (req, res, next) => {
 fetchTopics().then((topics) => {
@@ -25,7 +25,6 @@ exports.getArticles = (req, res, next) => {
     exports.getArticlesById = (req, res, next) => {
         const {article_id} = req.params;
         fetchArticlesById(article_id).then((article) => {
-            console.log({article})
             res.status(200).send({article})
         }).catch(error => {
 
@@ -67,5 +66,15 @@ exports.getArticles = (req, res, next) => {
         }).catch(error => {
     
             next(error);
+        })
+    }
+
+    exports.deleteComment = (req, res, next) => {
+        const { comment_id } = req.params
+        removeComment(comment_id).then(() => {
+            res.status(204).send({message: `The ${comment_id} has been successfully deleted`})
+        })
+        .catch((error) => {
+            next(error)
         })
     }
