@@ -1,5 +1,5 @@
 const app = require("./app")
-const port = 9090
+const port = 5432
 
 app.listen(port, () =>{
    
